@@ -36,12 +36,12 @@ function getDeg() {
   };
 }
 
-function drawCircle(radius, lineWidth, strokeStyle, fillStyle = null) {
-  contextClock.strokeStyle = strokeStyle;
-  contextClock.lineWidth = lineWidth;
+function drawCircle(x, y, radius, lineWidth, strokeStyle, fillStyle = null) {
+  contextClock.strokeStyle = strokeStyle || "black";
+  contextClock.lineWidth = lineWidth || 1;
   contextClock.beginPath();
-  contextClock.arc(xCenterClock, yCenterClock, radius, 0, 2 * Math.PI, true);
-  contextClock.moveTo(xCenterClock, yCenterClock);
+  contextClock.arc(x, y, radius, 0, 2 * Math.PI, true);
+  contextClock.moveTo(x, y);
   if (fillStyle) {
     contextClock.fillStyle = fillStyle;
     contextClock.fill();
@@ -53,23 +53,20 @@ function drawCircle(radius, lineWidth, strokeStyle, fillStyle = null) {
 function drawClockPoint() {
   const radiusNum = radiusClock - 10;
   let radiusPoint;
+  let fill;
   for (let tm = 0; tm < 60; tm++) {
-    contextClock.beginPath();
     if (tm % 5 == 0) {
       radiusPoint = 5;
-      contextClock.fillStyle = 'darkred';
+      fill = 'darkred';
     } else {
       radiusPoint = 2;
-      contextClock.fillStyle = 'darkgreen';
+      fill = 'darkgreen';
     }
 
     //для выделения часовых рисочек
     let xPointM = xCenterClock + radiusNum * Math.cos(-6 * tm * (Math.PI / 180) + Math.PI / 2);
     let yPointM = yCenterClock - radiusNum * Math.sin(-6 * tm * (Math.PI / 180) + Math.PI / 2);
-    contextClock.arc(xPointM, yPointM, radiusPoint, 0, 2 * Math.PI, true);
-    contextClock.fill();
-    contextClock.stroke();
-    contextClock.closePath();
+    drawCircle(xPointM, yPointM, radiusPoint, 1, null, fill);
   }
 }
 
@@ -98,7 +95,7 @@ function drawClockArrows(width, length, degres, color) {
 
 function drawClock() {
   contextClock.clearRect(0, 0, canvasWidth, canvasHeight);
-  drawCircle(radiusClock,1,'#000000');
+  drawCircle(xCenterClock, yCenterClock, radiusClock, 1, '#000000');
   drawClockPoint();
   drawClockDigitsFace();
 
@@ -118,7 +115,7 @@ function drawClock() {
   drawClockArrows(1, lengthSeconds, secondsDegres, '#ff0000');
 
   //Рисуем центр часов
-  drawCircle(5, 1,'#000000', 'gold');
+  drawCircle(xCenterClock, yCenterClock, 5, 1, '#000000', 'gold');
 
 }
 
